@@ -124,7 +124,7 @@ export default function Home() {
                       </h3>
                       <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{project.description}</p>
                       <div className="flex flex-wrap gap-1.5">
-                        {project.techStack.map((tech, i) => (
+                        {project.techStack.map((tech: string, i: number) => (
                           <span
                             key={i}
                             className="px-2 py-0.5 bg-secondary/50 rounded-full text-[10px] text-secondary-foreground border border-border/50"
