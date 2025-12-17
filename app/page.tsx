@@ -1,3 +1,4 @@
+"use client"
 import {
   Github,
   Linkedin,
@@ -16,194 +17,291 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { motion } from "motion/react"
+import Image from "next/image"
 
 export default function Home() {
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  }
+
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 selection:text-primary">
       {/* Combined Navbar and Hero Section - Docked to top */}
-      {/*< header className="sticky size-fit top-0 z-10 bg-black/80 backdrop-blur-sm border-b border-zinc-800 flex justify-center" > */}
-      <header className="sticky mx-auto top-0 z-10 w-fit">
-        <div className="max-w-2xl w-full px-4">
-          <div className="flex flex-col items-center">
-            {/* Hero Section */}
-            <div className="w-fit mx-auto flex items-center justify-between border border-zinc-800 rounded-lg bg-zinc-900/50 p-2 mt-2 mb-2">
-              <div className="text-left">
-                <h1 className="text-sm font-bold tracking-tight">Hey Yashraj Here</h1>
-                <p className="text-xs text-zinc-400">Software Engineer & AI Enthusiast</p>
-              </div>
-
-              {/* Social Links - Moved inside hero box */}
-              <div className="flex space-x-2 ml-4">
-                <Link href="#" className="rounded-full bg-zinc-800 p-1.5 transition-colors hover:bg-zinc-700">
-                  <Github className="h-3 w-3" />
-                  <span className="sr-only">GitHub</span>
-                </Link>
-                <Link href="#" className="rounded-full bg-zinc-800 p-1.5 transition-colors hover:bg-zinc-700">
-                  <Linkedin className="h-3 w-3" />
-                  <span className="sr-only">LinkedIn</span>
-                </Link>
-                <Link href="#" className="rounded-full bg-zinc-800 p-1.5 transition-colors hover:bg-zinc-700">
-                  <Twitter className="h-3 w-3" />
-                  <span className="sr-only">Twitter</span>
-                </Link>
-                <Link href="#" className="rounded-full bg-zinc-800 p-1.5 transition-colors hover:bg-zinc-700">
-                  <Mail className="h-3 w-3" />
-                  <span className="sr-only">Email</span>
-                </Link>
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <nav className="w-full max-w-md">
-              <Tabs defaultValue="portfolio" className="w-full">
-                <TabsList className="grid w-full grid-cols-6 bg-zinc-900 h-10 text-xs">
-                  <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
-                  <TabsTrigger value="skills">Skills</TabsTrigger>
-                  <TabsTrigger value="experience">Experience</TabsTrigger>
-                  <TabsTrigger value="blog">Blog</TabsTrigger>
-                  <TabsTrigger value="about">About</TabsTrigger>
-                  <TabsTrigger value="contact">Contact</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </nav>
+      <header className="sticky top-4 z-50 mx-auto w-full max-w-2xl px-4 flex flex-col items-center gap-3">
+        {/* Hero Section */}
+        <motion.div
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          className="w-fit flex items-center justify-between gap-6 border border-border/40 rounded-lg bg-background/80 backdrop-blur-md shadow-sm px-4 py-2"
+        >
+          <div className="text-left">
+            <h1 className="text-sm font-bold tracking-tight">Hey Yashraj Here</h1>
+            <p className="text-xs text-muted-foreground">Software Engineer & AI Enthusiast</p>
           </div>
-        </div>
+
+          {/* Social Links */}
+          <div className="flex space-x-1">
+            {[
+              { icon: Github, label: "GitHub" },
+              { icon: Linkedin, label: "LinkedIn" },
+              { icon: Twitter, label: "Twitter" },
+              { icon: Mail, label: "Email" },
+            ].map((social, i) => (
+              <Link
+                key={i}
+                href="#"
+                className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              >
+                <social.icon className="h-4 w-4" />
+                <span className="sr-only">{social.label}</span>
+              </Link>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Navigation */}
+        <motion.nav
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
+          className="w-full max-w-md"
+        >
+          <Tabs defaultValue="portfolio" className="w-full">
+            <TabsList className="grid w-full grid-cols-6 h-10 bg-background/80 backdrop-blur-md border border-border/40 shadow-sm rounded-lg p-1">
+              {["Portfolio", "Skills", "Experience", "Blog", "About", "Contact"].map((tab) => (
+                <TabsTrigger
+                  key={tab}
+                  value={tab.toLowerCase()}
+                  className="text-[10px] sm:text-xs data-[state=active]:bg-accent data-[state=active]:text-accent-foreground rounded-md transition-all h-full"
+                >
+                  {tab}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </motion.nav>
       </header>
 
-      <main className="flex flex-col items-center px-4 py-6">
+      <main className="flex flex-col items-center px-4 py-8">
         {/* Projects Section */}
-        <section className="mb-10 max-w-2xl w-full">
-          <h2 className="text-lg font-bold mb-3 flex items-center">
-            <Code className="mr-2 h-4 w-4" />
+        <motion.section
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="mb-16 max-w-2xl w-full"
+        >
+          <motion.h2 variants={item} className="text-lg font-bold mb-6 flex items-center gap-2">
+            <span className="p-1.5 rounded-md bg-primary/10 text-primary">
+              <Code className="h-4 w-4" />
+            </span>
             Portfolio
-          </h2>
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+          </motion.h2>
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
             {projects.map((project, index) => (
-              <Card
-                key={index}
-                className="bg-zinc-900 border-zinc-800 overflow-hidden group hover:border-zinc-700 transition-all"
-              >
-                <div className="aspect-video w-full bg-zinc-800 group-hover:bg-zinc-700 transition-colors"></div>
-                <div className="border-t border-zinc-800">
-                  <CardContent className="p-3">
-                    <h3 className="font-bold text-sm">{project.title}</h3>
-                    <p className="text-xs text-zinc-400 mb-2">{project.description}</p>
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {project.techStack.map((tech, i) => (
-                        <span key={i} className="px-1.5 py-0.5 bg-zinc-800 rounded text-[10px] text-zinc-300">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex justify-end gap-2 p-2 pt-0">
-                    <Button variant="outline" size="icon" className="h-6 w-6">
-                      <Github className="h-3 w-3" />
-                      <span className="sr-only">GitHub</span>
-                    </Button>
-                    <Button variant="outline" size="icon" className="h-6 w-6">
-                      <ExternalLink className="h-3 w-3" />
-                      <span className="sr-only">Visit</span>
-                    </Button>
-                  </CardFooter>
-                </div>
-              </Card>
+              <motion.div key={index} variants={item}>
+                <Card className="h-full overflow-hidden border-border/40 bg-card/50 hover:bg-card hover:border-border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group">
+                  <div className="aspect-video w-full bg-muted/50 group-hover:bg-muted transition-colors relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <div className="border-t border-border/40">
+                    <CardContent className="p-4">
+                      <h3 className="font-bold text-sm mb-1 group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{project.description}</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.techStack.map((tech, i) => (
+                          <span
+                            key={i}
+                            className="px-2 py-0.5 bg-secondary/50 rounded-full text-[10px] text-secondary-foreground border border-border/50"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-end gap-2 p-4 pt-0">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary">
+                        <Github className="h-4 w-4" />
+                        <span className="sr-only">GitHub</span>
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary">
+                        <ExternalLink className="h-4 w-4" />
+                        <span className="sr-only">Visit</span>
+                      </Button>
+                    </CardFooter>
+                  </div>
+                </Card>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Experience Section */}
-        <section className="mb-10 max-w-2xl w-full">
-          <h2 className="text-lg font-bold mb-3 flex items-center">
-            <Briefcase className="mr-2 h-4 w-4" />
+        <motion.section
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="mb-16 max-w-2xl w-full"
+        >
+          <motion.h2 variants={item} className="text-lg font-bold mb-6 flex items-center gap-2">
+            <span className="p-1.5 rounded-md bg-primary/10 text-primary">
+              <Briefcase className="h-4 w-4" />
+            </span>
             Experience
-          </h2>
-          <div className="space-y-3">
+          </motion.h2>
+          <div className="space-y-4">
             {experiences.map((experience, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="border border-zinc-800 rounded-lg bg-zinc-900/50 p-3 hover:border-zinc-700 transition-colors"
+                variants={item}
+                className="relative pl-6 border-l border-border/40 pb-6 last:pb-0"
               >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-bold text-sm">{experience.role}</h3>
-                    <p className="text-xs text-zinc-400">{experience.company}</p>
+                <div className="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full bg-primary ring-4 ring-background" />
+                <div className="rounded-lg border border-border/40 bg-card/50 p-4 hover:bg-card hover:border-border transition-all duration-300">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <h3 className="font-bold text-sm">{experience.role}</h3>
+                      <p className="text-xs text-muted-foreground">{experience.company}</p>
+                    </div>
+                    <span className="text-[10px] text-muted-foreground bg-secondary/50 px-2 py-1 rounded-full border border-border/50">
+                      {experience.period}
+                    </span>
                   </div>
-                  <span className="text-[10px] text-zinc-500 bg-zinc-800 px-1.5 py-0.5 rounded">
-                    {experience.period}
-                  </span>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{experience.description}</p>
                 </div>
-                <p className="mt-2 text-xs text-zinc-400">{experience.description}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Blog Section */}
-        <section className="mb-10 max-w-2xl w-full">
-          <h2 className="text-lg font-bold mb-3 flex items-center">
-            <BookOpen className="mr-2 h-4 w-4" />
+        <motion.section
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="mb-16 max-w-2xl w-full"
+        >
+          <motion.h2 variants={item} className="text-lg font-bold mb-6 flex items-center gap-2">
+            <span className="p-1.5 rounded-md bg-primary/10 text-primary">
+              <BookOpen className="h-4 w-4" />
+            </span>
             Blog
-          </h2>
-          <div className="grid gap-3 grid-cols-1">
+          </motion.h2>
+          <div className="grid gap-4 grid-cols-1">
             {blogPosts.map((post, index) => (
-              <Card key={index} className="bg-zinc-900 border-zinc-800 hover:border-zinc-700 transition-colors">
-                <CardContent className="p-3">
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-bold text-sm">{post.title}</h3>
-                    <p className="text-[10px] text-zinc-500 bg-zinc-800 px-1.5 py-0.5 rounded">{post.date}</p>
-                  </div>
-                  <p className="text-xs text-zinc-400 mt-1">{post.excerpt}</p>
-                </CardContent>
-                <CardFooter className="px-3 pb-3 pt-0">
-                  <Button variant="outline" size="sm" className="text-xs h-7 px-2">
-                    Read More
-                    <ArrowRight className="ml-1 h-3 w-3" />
-                  </Button>
-                </CardFooter>
-              </Card>
+              <motion.div key={index} variants={item}>
+                <Card className="bg-card/50 border-border/40 hover:bg-card hover:border-border transition-all duration-300 group">
+                  <CardContent className="p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-bold text-sm group-hover:text-primary transition-colors">{post.title}</h3>
+                      <p className="text-[10px] text-muted-foreground whitespace-nowrap ml-4">{post.date}</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground mb-3">{post.excerpt}</p>
+                    <div className="flex items-center text-xs text-primary font-medium opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      Read Article <ArrowRight className="ml-1 h-3 w-3" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Skills Section */}
-        <section className="mb-10 max-w-2xl w-full">
-          <h2 className="text-lg font-bold mb-3 flex items-center">
-            <Award className="mr-2 h-4 w-4" />
+        <motion.section
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="mb-16 max-w-2xl w-full"
+        >
+          <motion.h2 variants={item} className="text-lg font-bold mb-6 flex items-center gap-2">
+            <span className="p-1.5 rounded-md bg-primary/10 text-primary">
+              <Award className="h-4 w-4" />
+            </span>
             Skills
-          </h2>
+          </motion.h2>
           <div className="flex flex-wrap gap-2">
             {skills.map((skill, index) => (
-              <div
+              <motion.div
                 key={index}
-                className="rounded-md border border-zinc-800 bg-zinc-900 px-2 py-0.5 text-xs hover:bg-zinc-800 transition-colors"
+                variants={item}
+                className="rounded-full border border-border/40 bg-secondary/30 px-3 py-1 text-xs text-secondary-foreground hover:bg-primary/10 hover:text-primary hover:border-primary/20 transition-colors cursor-default"
               >
                 {skill}
-              </div>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Contact Form */}
-        <section className="mb-10 max-w-md w-full">
-          <h2 className="text-lg font-bold mb-3 flex items-center">
-            <Mail className="mr-2 h-4 w-4" />
-            Contact Form
-          </h2>
-          <form className="space-y-3">
-            <div className="grid grid-cols-2 gap-3">
-              <Input type="text" placeholder="Name" className="bg-zinc-900 border-zinc-800 h-8 text-sm" />
-              <Input type="email" placeholder="Email" className="bg-zinc-900 border-zinc-800 h-8 text-sm" />
-            </div>
-            <Textarea placeholder="Message" className="min-h-[100px] bg-zinc-900 border-zinc-800 text-sm" />
-            <div className="flex justify-end">
-              <Button type="submit" className="group h-8 text-xs">
-                Send
-                <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
-              </Button>
-            </div>
-          </form>
-        </section>
+        <div className="flex max-w-2xl w-full">
+          <motion.section
+            variants={container}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="mb-10 max-w-md w-full"
+          >
+            <motion.h2 variants={item} className="text-lg font-bold mb-6 flex items-center gap-2">
+              <span className="p-1.5 rounded-md bg-primary/10 text-primary">
+                <Mail className="h-4 w-4" />
+              </span>
+              Contact
+            </motion.h2>
+            <motion.form variants={item} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Input
+                    type="text"
+                    placeholder="Name"
+                    className="bg-card/50 border-bg-card/40 focus:bg-card transition-colors"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Input
+                    type="email"
+                    placeholder="Email"
+                    className="bg-card/50 border-bg-card/40 focus:bg-card transition-colors"
+                  />
+                </div>
+              </div>
+              <Textarea
+                placeholder="Message"
+                className="min-h-[120px] bg-card/50 border-bg-card/40 focus:bg-card transition-colors resize-none"
+              />
+              <div className="flex justify-start">
+                <Button type="submit" className="group">
+                  Send Message
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </div>
+            </motion.form>
+          </motion.section>
+          <div className="flex justify-center items-start w-1/2 bgf-[#1a1a1a] pt-20 ">
+            <Image src="/mailbox.svg"
+              width={125}
+              height={125}
+              alt="Contact" />
+          </div>
+        </div>
       </main>
     </div>
   )
